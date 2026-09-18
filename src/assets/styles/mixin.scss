@@ -1,0 +1,52 @@
+@font-face {
+  font-family: 'YouSheBiaoTiHei';
+  font-weight: normal;
+  src: url('@/assets/fonts/YouSheBiaoTiHei.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'PangMenZhengDao';
+  font-weight: normal;
+  src: url('@/assets/fonts/PangMenZhengDao.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'DS-DIGIT';
+  src: url('./font/DS-DIGIT.TTF');
+}
+
+@font-face {
+  font-family: Tencent;
+  src: url('./font/TencentSans-W7.otf');
+}
+
+
+
+@font-face {
+  font-family: HuXiaoBo-NanShen;
+  src: url('./font/nanshen.otf');
+}
+
+@font-face {
+  font-family: SJyunhei;
+  src: url('./font/三极韵黑简体.ttf');
+}
+
+@font-face {
+  font-family: Ding;
+  src: url('./font/DS-DIGI.TTF');
+}
+
+
+@keyframes float {
+  0% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-5px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}

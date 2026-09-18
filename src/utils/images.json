@@ -1,0 +1,24 @@
+{
+  "id": 1,
+  "name": "VR全景",
+  "remark": "",
+  "keywords": "",
+  "thumbUrl": "",
+  "createDate": 1711090590,
+  "updateDate": 1715855142,
+  "expired": 1,
+  "expireDate": "",
+  "flag": {
+    "showNavbar": true
+  },
+  "scenes": [
+    {
+      "id": 1,
+      "name": "场景一",
+      "panorama": "./sence/1.jpg",
+      "thumbnail": "./sence/1.jpg",
+      "sort": 1,
+      "markers": []
+    }
+  ]
+}

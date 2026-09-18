@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>边坡 360 全景监测大屏</title>
+  <script src="/easyplayer/EasyPlayer-element.min.js"></script>
+  <script src="/easyplayer/EasyPlayer.wasm"></script>
+  <style>
+    * {
+      -webkit-user-select: none;
+      /* Safari/Chrome */
+      -moz-user-select: none;
+      /* Firefox */
+      -ms-user-select: none;
+      /* IE10+/Edge */
+      user-select: none;
+      /* Standard syntax */
+    }
+
+    html,
+    body,
+    #app {
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app"></div>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+
+</html>

@@ -1,0 +1,37 @@
+{
+  "name": "VR",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmitOnError false && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@photo-sphere-viewer/autorotate-plugin": "^5.13.1",
+    "@photo-sphere-viewer/compass-plugin": "^5.13.1",
+    "@photo-sphere-viewer/core": "^5.13.1",
+    "@photo-sphere-viewer/gallery-plugin": "^5.13.1",
+    "@photo-sphere-viewer/markers-plugin": "^5.13.1",
+    "@vueuse/core": "^13.1.0",
+    "axios": "^1.8.4",
+    "echarts": "^5.6.0",
+    "echarts-gl": "^2.0.9",
+    "mitt": "^3.0.1",
+    "pinia": "^3.0.1",
+    "pinia-plugin-persistedstate": "^4.2.0",
+    "sass": "^1.86.0",
+    "sass-loader": "^16.0.5",
+    "vue": "^3.5.13",
+    "vue-router": "^4.5.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.14.1",
+    "@vitejs/plugin-vue": "^5.2.3",
+    "@vue/tsconfig": "^0.7.0",
+    "typescript": "~5.8.3",
+    "vite": "^6.2.6",
+    "vue-tsc": "^2.2.8"
+  }
+}
