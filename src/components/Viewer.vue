@@ -331,10 +331,16 @@ const getAllSensor = async () => {
           sameLocationIndex >= 0
             ? videoMarkerOffsets[sameLocationIndex] || { yaw: 0, pitch: 0 }
             : { yaw: 0, pitch: 0 };
+        const labelPositionClass =
+          item.sensorselfno === "C9003"
+            ? " marker-c9003"
+            : item.sensorselfno === "球机1层1"
+            ? " marker-spherical-camera"
+            : "";
         const updatedMarker = {
           ...item,
           type: getDeviceType(item),
-          className: `marker-${item.id}`,
+          className: `marker-${item.id}${labelPositionClass}`,
           anchor: "bottom center",
           position: {
             yaw: basePosition.yaw + offset.yaw,
@@ -442,6 +448,7 @@ const getCameraDemoMarkup = (marker: any) => {
   const cameraClass = isDomeCamera
     ? "camera-demo--dome"
     : "camera-demo--gun";
+  const demoBaseUrl = import.meta.env.BASE_URL;
 
   return `
     <div class="camera-demo ${cameraClass}">
@@ -450,9 +457,11 @@ const getCameraDemoMarkup = (marker: any) => {
         <span>${cameraType} · ${cameraName}</span>
       </div>
       <div class="camera-demo-scene" aria-label="${cameraType}演示画面">
-        <div class="camera-demo-sky"></div>
-        <div class="camera-demo-slope"></div>
-        <div class="camera-demo-vegetation"></div>
+        <div class="camera-demo-gallery">
+          <img src="${demoBaseUrl}camera-demo/slope-road-day.png" alt="山路边坡实景" />
+          <img src="${demoBaseUrl}camera-demo/retaining-wall-road.png" alt="挡墙道路实景" />
+          <img src="${demoBaseUrl}camera-demo/rainy-slope-road.png" alt="雨后边坡实景" />
+        </div>
         <div class="camera-demo-grid"></div>
         <div class="camera-demo-sweep"></div>
         <div class="camera-demo-crosshair"><span></span></div>
@@ -467,7 +476,7 @@ const getCameraDemoMarkup = (marker: any) => {
         <div class="camera-demo-timestamp">2026-09-18&nbsp;&nbsp;18:35:59</div>
       </div>
       <div class="camera-demo-footer">
-        <span><b></b>在线演示</span>
+        <span><b></b>实景轮播</span>
         <span>${isDomeCamera ? "360°巡航" : "定点监测"}</span>
         <span>信号 98%</span>
       </div>
@@ -795,6 +804,15 @@ onUnmounted(() => {
     1px 1px 0 #000;
 }
 
+/* C9003 与球机1层1处于相邻视线，标签上下错开避免遮挡。 */
+.psv-marker.marker-c9003 .sensor-marker-label {
+  transform: translateY(-18px);
+}
+
+.psv-marker.marker-spherical-camera .sensor-marker-label {
+  transform: translateY(18px);
+}
+
 .custom-tooltip {
   min-width: 300px;
   max-width: 100vw;
@@ -884,12 +902,50 @@ onUnmounted(() => {
 .camera-demo-sky,
 .camera-demo-slope,
 .camera-demo-vegetation,
+.camera-demo-gallery,
 .camera-demo-grid,
 .camera-demo-sweep,
 .camera-demo-crosshair,
 .camera-demo-hud,
 .camera-demo-timestamp {
   position: absolute;
+}
+
+.camera-demo-gallery {
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  background: #102d34;
+}
+
+.camera-demo-gallery::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(2, 21, 30, 0.05), rgba(2, 21, 30, 0.28));
+  pointer-events: none;
+}
+
+.camera-demo-gallery img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  animation: camera-demo-gallery-cycle 15s linear infinite;
+}
+
+.camera-demo-gallery img:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.camera-demo-gallery img:nth-child(2) {
+  animation-delay: 5s;
+}
+
+.camera-demo-gallery img:nth-child(3) {
+  animation-delay: 10s;
 }
 
 .camera-demo-sky {
@@ -1074,6 +1130,12 @@ onUnmounted(() => {
 @keyframes camera-demo-vegetation-drift {
   from { transform: translateX(-1.5%); }
   to { transform: translateX(1.5%); }
+}
+
+@keyframes camera-demo-gallery-cycle {
+  0%, 29% { opacity: 1; }
+  34%, 95% { opacity: 0; }
+  100% { opacity: 1; }
 }
 
 .video-modal {
