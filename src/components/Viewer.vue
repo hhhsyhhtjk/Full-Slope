@@ -292,9 +292,10 @@ const getAllSensor = async () => {
           className: `marker-${item.id}`,
           anchor: "bottom center",
           sensorchildtype: "GNSJ全球导航卫星系统基站",
-          html: `<img width="32" height="32" src="${import.meta.env.BASE_URL}icons/icon-gnsj.png" />
-            <p style="text-align: center; text-shadow:-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000,1px 1px 0 #000; margin: 0;
-             font-size: 12px !important; color: #FFF">${item.name}</p>`,
+          html: `<div class="sensor-marker">
+            <img width="32" height="32" src="${import.meta.env.BASE_URL}icons/icon-gnsj.png" />
+            <span class="sensor-marker-label">${item.name}</span>
+          </div>`,
         };
         sensorList.value.push(updatedMarker);
       });
@@ -307,13 +308,14 @@ const getAllSensor = async () => {
           className: `marker-${item.id}`,
           anchor: "bottom center",
           position: parsePosition(item.position),
-          html: `<img width="32" height="32" src="${import.meta.env.BASE_URL}icons/icon-${getDeviceType(
+          html: `<div class="sensor-marker">
+            <img width="32" height="32" src="${import.meta.env.BASE_URL}icons/icon-${getDeviceType(
             item
           )}-${online ? Math.abs(item.warnlevel) : "00"}.png" />
-            <p style="text-align: center; text-shadow:-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000,1px 1px 0 #000; margin: 0;
-             font-size: 14px; color:#FFF">  ${
+            <span class="sensor-marker-label">${
                !online ? "离线" : item.warnlevel ? "异常" : "正常"
-             }(${item.sensorselfno})</p>`,
+             }(${item.sensorselfno})</span>
+          </div>`,
         };
         sensorList.value.push(updatedMarker);
       });
@@ -659,23 +661,42 @@ onUnmounted(() => {
 }
 
 .psv-marker--normal {
-  display: flex !important;
+  display: block !important;
+  width: max-content !important;
+  height: auto !important;
+  overflow: visible !important;
+}
+
+.sensor-marker {
+  display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  width: max-content !important;
-  height: auto !important;
+  gap: 4px;
+  width: max-content;
+  height: auto;
   line-height: 1.2;
+  text-align: center;
 }
 
-.psv-marker--normal > p {
+.sensor-marker > img {
+  flex: 0 0 auto;
+  display: block;
+  margin: 0 !important;
+}
+
+.sensor-marker-label {
   display: block !important;
-  margin: 3px 0 0 !important;
+  margin: 0 !important;
   padding: 0 !important;
   max-width: none !important;
   white-space: nowrap !important;
   line-height: 1.2 !important;
   text-align: center;
+  font-size: 14px;
+  color: #fff;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
+    1px 1px 0 #000;
 }
 
 .custom-tooltip {
