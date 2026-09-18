@@ -307,11 +307,11 @@ const getAllSensor = async () => {
       });
 
       const videoMarkerOffsets = [
-        { yaw: -0.18, pitch: 0.04 },
-        { yaw: -0.09, pitch: 0.01 },
-        { yaw: 0, pitch: -0.04 },
-        { yaw: 0.09, pitch: 0.01 },
-        { yaw: 0.18, pitch: 0.04 },
+        { yaw: -0.38, pitch: 0.16 },
+        { yaw: -0.19, pitch: -0.02 },
+        { yaw: 0, pitch: 0.18 },
+        { yaw: 0.19, pitch: -0.02 },
+        { yaw: 0.38, pitch: 0.16 },
       ];
 
       data.forEach((item: any, index: number) => {
