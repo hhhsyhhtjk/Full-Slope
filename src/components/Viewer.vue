@@ -277,7 +277,13 @@ const getAllSensor = async () => {
   );
   if (res.status === 200) {
     let data = res.data.result;
-    data.push(...videoData);
+    data = [...data, ...videoData].filter((item: any, index: number, items: any[]) => {
+      const key = `${item.type || item.sensorchildtype}|${item.sensorselfno}|${JSON.stringify(item.position)}`;
+      return items.findIndex((candidate: any) => {
+        const candidateKey = `${candidate.type || candidate.sensorchildtype}|${candidate.sensorselfno}|${JSON.stringify(candidate.position)}`;
+        return candidateKey === key;
+      }) === index;
+    });
     // data = GNSSData;
 
     if (data && data.length > 0) {
