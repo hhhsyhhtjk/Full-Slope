@@ -767,6 +767,7 @@ onUnmounted(() => {
 }
 
 .sensor-marker {
+  --marker-offset-y: 0px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -776,7 +777,7 @@ onUnmounted(() => {
   height: auto;
   line-height: 1.2;
   text-align: center;
-  transform: translateY(-4px);
+  transform: translateY(calc(-4px + var(--marker-offset-y)));
 }
 
 .sensor-marker > img {
@@ -804,13 +805,13 @@ onUnmounted(() => {
     1px 1px 0 #000;
 }
 
-/* C9003 与球机1层1处于相邻视线，标签上下错开避免遮挡。 */
-.psv-marker.marker-c9003 .sensor-marker-label {
-  transform: translateY(-18px);
+/* C9003 与球机1层1处于相邻视线，整体移动图标和标签，避免两者错位。 */
+.psv-marker.marker-c9003 .sensor-marker {
+  --marker-offset-y: -18px;
 }
 
-.psv-marker.marker-spherical-camera .sensor-marker-label {
-  transform: translateY(18px);
+.psv-marker.marker-spherical-camera .sensor-marker {
+  --marker-offset-y: 18px;
 }
 
 .custom-tooltip {
