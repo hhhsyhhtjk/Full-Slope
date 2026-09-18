@@ -306,14 +306,40 @@ const getAllSensor = async () => {
         sensorList.value.push(updatedMarker);
       });
 
-      data.forEach((item: any) => {
+      const videoMarkerOffsets = [
+        { yaw: -0.18, pitch: 0.04 },
+        { yaw: -0.09, pitch: 0.01 },
+        { yaw: 0, pitch: -0.04 },
+        { yaw: 0.09, pitch: 0.01 },
+        { yaw: 0.18, pitch: 0.04 },
+      ];
+
+      data.forEach((item: any, index: number) => {
         const online = item.timeout === 0;
+        const basePosition = parsePosition(item.position);
+        const sameLocationIndex =
+          item.type === "sp"
+            ? data
+                .slice(0, index)
+                .filter(
+                  (candidate: any) =>
+                    candidate.type === "sp" &&
+                    candidate.position === item.position
+                ).length
+            : -1;
+        const offset =
+          sameLocationIndex >= 0
+            ? videoMarkerOffsets[sameLocationIndex] || { yaw: 0, pitch: 0 }
+            : { yaw: 0, pitch: 0 };
         const updatedMarker = {
           ...item,
           type: getDeviceType(item),
           className: `marker-${item.id}`,
           anchor: "bottom center",
-          position: parsePosition(item.position),
+          position: {
+            yaw: basePosition.yaw + offset.yaw,
+            pitch: basePosition.pitch + offset.pitch,
+          },
           html: `<div class="sensor-marker">
             <img width="32" height="32" src="${import.meta.env.BASE_URL}icons/icon-${getDeviceType(
             item
