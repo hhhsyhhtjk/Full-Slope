@@ -236,6 +236,13 @@ emitter.on('setSensorList', (data: any) => {
           rgba(0, 9, 139, 0.3) 30%,
           rgba(0, 49, 139, 0.2) 100%);
 
+      span {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
       .arrow {
         transition: transform 0.3s ease;
         font-size: 12px;

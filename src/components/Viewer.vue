@@ -658,6 +658,26 @@ onUnmounted(() => {
   margin: auto;
 }
 
+.psv-marker--normal {
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: max-content !important;
+  height: auto !important;
+  line-height: 1.2;
+}
+
+.psv-marker--normal > p {
+  display: block !important;
+  margin: 3px 0 0 !important;
+  padding: 0 !important;
+  max-width: none !important;
+  white-space: nowrap !important;
+  line-height: 1.2 !important;
+  text-align: center;
+}
+
 .custom-tooltip {
   min-width: 300px;
   max-width: 100vw;

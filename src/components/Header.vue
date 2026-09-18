@@ -2,7 +2,7 @@
   <div class="header">
     <date-time class="date"></date-time>
     <img class="bg" src="../assets/images/bg/bg-header2.png" alt="" />
-    <h2 class="title">阳光李子后山边坡智慧监测平台</h2>
+    <h2 class="title">后山边坡智慧监测平台</h2>
     <div class="btn-group">
       <button
         class="btn-item btn-setting"

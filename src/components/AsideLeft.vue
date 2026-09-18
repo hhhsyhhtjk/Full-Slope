@@ -423,6 +423,9 @@ onBeforeUnmount(() => {});
     font-size: 14px;
     color: #fff;
     margin-top: -6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .value {
     font-size: 30px;
