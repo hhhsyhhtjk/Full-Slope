@@ -677,6 +677,7 @@ onUnmounted(() => {
   height: auto;
   line-height: 1.2;
   text-align: center;
+  transform: translateY(-4px);
 }
 
 .sensor-marker > img {
@@ -695,6 +696,11 @@ onUnmounted(() => {
   text-align: center;
   font-size: 14px;
   color: #fff;
+  padding: 2px 6px !important;
+  border: 1px solid rgba(154, 252, 255, 0.65);
+  border-radius: 3px;
+  background: rgba(0, 20, 36, 0.78);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.45);
   text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
     1px 1px 0 #000;
 }
