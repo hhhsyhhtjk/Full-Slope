@@ -422,6 +422,59 @@ const convertGnssData = (lastceliang: any) => {
   return result;
 };
 
+const escapeHtml = (value: any) =>
+  String(value ?? "").replace(
+    /[&<>"']/g,
+    (character) =>
+      ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;",
+      })[character] || character
+  );
+
+const getCameraDemoMarkup = (marker: any) => {
+  const cameraName = escapeHtml(marker.sensorselfno || "未命名");
+  const isDomeCamera = String(marker.sensorselfno || "").includes("球机");
+  const cameraType = isDomeCamera ? "球机" : "枪机";
+  const cameraClass = isDomeCamera
+    ? "camera-demo--dome"
+    : "camera-demo--gun";
+
+  return `
+    <div class="camera-demo ${cameraClass}">
+      <div class="camera-demo-topbar">
+        <span class="camera-demo-live"><i></i>LIVE DEMO</span>
+        <span>${cameraType} · ${cameraName}</span>
+      </div>
+      <div class="camera-demo-scene" aria-label="${cameraType}演示画面">
+        <div class="camera-demo-sky"></div>
+        <div class="camera-demo-slope"></div>
+        <div class="camera-demo-vegetation"></div>
+        <div class="camera-demo-grid"></div>
+        <div class="camera-demo-sweep"></div>
+        <div class="camera-demo-crosshair"><span></span></div>
+        <div class="camera-demo-hud camera-demo-hud--left">
+          <span>STATUS: ONLINE</span>
+          <span>MODE: AUTO</span>
+        </div>
+        <div class="camera-demo-hud camera-demo-hud--right">
+          <span>${isDomeCamera ? "PAN 128°" : "FIXED VIEW"}</span>
+          <span>ZOOM 4.0X</span>
+        </div>
+        <div class="camera-demo-timestamp">2026-09-18&nbsp;&nbsp;18:35:59</div>
+      </div>
+      <div class="camera-demo-footer">
+        <span><b></b>在线演示</span>
+        <span>${isDomeCamera ? "360°巡航" : "定点监测"}</span>
+        <span>信号 98%</span>
+      </div>
+    </div>
+  `;
+};
+
 const generateTooltipContent = (marker: any) => {
   if (!marker) return "暂无数据";
 
@@ -469,13 +522,18 @@ const generateTooltipContent = (marker: any) => {
       `;
       break;
     case "sp": // 视频站
+      const cameraName = escapeHtml(marker.sensorselfno ?? "未命名");
+      const videoContent = marker.url
+        ? `<easy-player ref="videoplay" video-url="${escapeHtml(
+            marker.url
+          )}"></easy-player>`
+        : getCameraDemoMarkup(marker);
       content = `
         <article class="tooltip-wrap">
           <div class="water">
-            <p><strong>名称：${marker.sensorselfno ?? "未命名"}</strong></p>
+            <p><strong>名称：${cameraName}</strong></p>
             <div class="video-wrap">
-               <easy-player ref="videoplay" video-url="${marker.url}">
-                </easy-player>
+              ${videoContent}
             </div>
           </div>
         </article>
@@ -767,6 +825,255 @@ onUnmounted(() => {
 .video-wrap {
   width: 550px;
   height: 350px;
+}
+
+.camera-demo {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  color: #dffcff;
+  border: 1px solid rgba(96, 234, 255, 0.75);
+  border-radius: 4px;
+  background: #061b2a;
+  box-shadow: inset 0 0 24px rgba(0, 196, 255, 0.2), 0 0 12px rgba(0, 0, 0, 0.35);
+  font-family: "TencentSans-W7", "Microsoft YaHei", sans-serif;
+}
+
+.camera-demo-topbar,
+.camera-demo-footer {
+  height: 30px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  background: rgba(3, 25, 40, 0.9);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+}
+
+.camera-demo-live {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: #8ffcff;
+}
+
+.camera-demo-live i,
+.camera-demo-footer b {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #47f4c7;
+  box-shadow: 0 0 8px #47f4c7;
+}
+
+.camera-demo-scene {
+  position: relative;
+  height: calc(100% - 60px);
+  overflow: hidden;
+  isolation: isolate;
+  background: linear-gradient(180deg, #0d5570 0%, #123e46 49%, #182c29 50%, #071a1a 100%);
+}
+
+.camera-demo--gun .camera-demo-scene {
+  background: linear-gradient(180deg, #143e62 0%, #0d3447 48%, #172f32 49%, #06191b 100%);
+}
+
+.camera-demo-sky,
+.camera-demo-slope,
+.camera-demo-vegetation,
+.camera-demo-grid,
+.camera-demo-sweep,
+.camera-demo-crosshair,
+.camera-demo-hud,
+.camera-demo-timestamp {
+  position: absolute;
+}
+
+.camera-demo-sky {
+  inset: 0;
+  opacity: 0.55;
+  background:
+    radial-gradient(circle at 18% 25%, rgba(144, 240, 255, 0.28) 0 2px, transparent 3px),
+    radial-gradient(circle at 78% 18%, rgba(144, 240, 255, 0.22) 0 2px, transparent 3px),
+    linear-gradient(130deg, transparent 0 46%, rgba(132, 226, 239, 0.16) 47% 48%, transparent 49% 100%);
+}
+
+.camera-demo-slope {
+  left: -8%;
+  right: -8%;
+  bottom: 16%;
+  height: 54%;
+  opacity: 0.9;
+  transform: skewY(-8deg);
+  background:
+    linear-gradient(145deg, transparent 0 22%, rgba(93, 182, 151, 0.42) 23% 24%, transparent 25% 34%, rgba(49, 124, 102, 0.68) 35% 37%, transparent 38%),
+    linear-gradient(160deg, #2c7d5b 0%, #164e44 41%, #0b2d2d 78%);
+}
+
+.camera-demo-vegetation {
+  left: -10%;
+  right: -10%;
+  bottom: 0;
+  height: 43%;
+  opacity: 0.8;
+  background:
+    radial-gradient(ellipse at 12% 70%, #6acb70 0 8%, transparent 9%),
+    radial-gradient(ellipse at 30% 55%, #3b9d63 0 11%, transparent 12%),
+    radial-gradient(ellipse at 53% 74%, #75be5b 0 10%, transparent 11%),
+    radial-gradient(ellipse at 76% 51%, #2b8b60 0 13%, transparent 14%),
+    linear-gradient(180deg, transparent 0%, rgba(3, 25, 20, 0.45) 100%);
+  animation: camera-demo-vegetation-drift 7s ease-in-out infinite alternate;
+}
+
+.camera-demo-grid {
+  inset: 0;
+  z-index: 1;
+  opacity: 0.24;
+  background-image:
+    linear-gradient(rgba(134, 244, 255, 0.24) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(134, 244, 255, 0.24) 1px, transparent 1px);
+  background-size: 52px 42px;
+}
+
+.camera-demo-sweep {
+  top: 0;
+  bottom: 0;
+  left: -12%;
+  z-index: 2;
+  width: 24%;
+  opacity: 0.24;
+  transform: skewX(-18deg);
+  background: linear-gradient(90deg, transparent, rgba(76, 245, 255, 0.65), transparent);
+  animation: camera-demo-sweep 4s ease-in-out infinite;
+}
+
+.camera-demo--gun .camera-demo-sweep {
+  width: 2px;
+  opacity: 0.8;
+  transform: none;
+  background: #8effff;
+  box-shadow: 0 0 10px #8effff;
+  animation: camera-demo-scan 3.2s linear infinite;
+}
+
+.camera-demo-crosshair {
+  top: 50%;
+  left: 50%;
+  z-index: 3;
+  width: 54px;
+  height: 54px;
+  border: 1px solid rgba(145, 255, 248, 0.8);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 14px rgba(86, 244, 255, 0.35);
+  animation: camera-demo-target 2.4s ease-in-out infinite;
+}
+
+.camera-demo-crosshair::before,
+.camera-demo-crosshair::after,
+.camera-demo-crosshair span::before,
+.camera-demo-crosshair span::after {
+  content: "";
+  position: absolute;
+  background: rgba(145, 255, 248, 0.9);
+}
+
+.camera-demo-crosshair::before,
+.camera-demo-crosshair::after {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.camera-demo-crosshair::before {
+  width: 76px;
+  height: 1px;
+}
+
+.camera-demo-crosshair::after {
+  width: 1px;
+  height: 76px;
+}
+
+.camera-demo-crosshair span::before,
+.camera-demo-crosshair span::after {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  box-shadow: 0 0 8px #fff;
+}
+
+.camera-demo-hud {
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 8px;
+  color: rgba(218, 255, 255, 0.85);
+  font: 10px/1.2 "DS-DIGI", monospace;
+  letter-spacing: 0.08em;
+  text-shadow: 0 0 4px #00d9ff;
+}
+
+.camera-demo-hud--left {
+  top: 8px;
+  left: 8px;
+}
+
+.camera-demo-hud--right {
+  top: 8px;
+  right: 8px;
+  align-items: flex-end;
+}
+
+.camera-demo-timestamp {
+  left: 10px;
+  bottom: 8px;
+  z-index: 4;
+  color: #d9ffff;
+  font: 11px/1.2 "DS-DIGI", monospace;
+  text-shadow: 0 0 4px #00d9ff;
+}
+
+.camera-demo-footer {
+  color: rgba(223, 252, 255, 0.86);
+  font-size: 11px;
+}
+
+.camera-demo-footer span:first-child {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+@keyframes camera-demo-sweep {
+  0% { left: -20%; }
+  50% { left: 54%; }
+  100% { left: 110%; }
+}
+
+@keyframes camera-demo-scan {
+  0% { left: 0; opacity: 0; }
+  12% { opacity: 0.8; }
+  88% { opacity: 0.8; }
+  100% { left: 100%; opacity: 0; }
+}
+
+@keyframes camera-demo-target {
+  0%, 100% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.7; }
+  50% { transform: translate(-50%, -50%) scale(1.08); opacity: 1; }
+}
+
+@keyframes camera-demo-vegetation-drift {
+  from { transform: translateX(-1.5%); }
+  to { transform: translateX(1.5%); }
 }
 
 .video-modal {
